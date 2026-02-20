@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BeyondHomes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --chestnut:      #954535;
+      --chestnut-deep: #5e2510;
+      --chestnut-mid:  #7a3828;
+      --cream:         #fdf6f0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      background: var(--chestnut);
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════════════════════
+       PAGE SYSTEM
+    ═══════════════════════════════ */
+    .page {
+      display: none;
+      min-height: 100vh;
+    }
+    .page.active { display: flex; }
+
+    /* ═══════════════════════════════
+       PAGE 1 — HERO
+    ═══════════════════════════════ */
+    #page-hero {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: var(--chestnut);
+    }
+
+    #page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .eyebrow {
+      font-size: clamp(0.72rem, 1.8vw, 0.88rem);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(253,246,240,0.55);
+      margin-bottom: 1.5rem;
+      font-weight: 300;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(3.5rem, 12vw, 9rem);
+      letter-spacing: -0.01em;
+      line-height: 0.95;
+      color: var(--cream);
+    }
+
+    .tagline {
+      font-weight: 200;
+      font-size: clamp(0.88rem, 2vw, 1.05rem);
+      letter-spacing: 0.2em;
+      color: rgba(253,246,240,0.5);
+      margin-top: 2rem;
+      text-transform: uppercase;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      opacity: 0;
+      animation: fadeIn 1s 1.8s ease forwards;
+      z-index: 1;
+    }
+
+    .scroll-hint span {
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(253,246,240,0.4);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: rgba(253,246,240,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(253,246,240,0.7);
+      animation: scrollDrop 1.8s ease-in-out infinite 2s;
+    }
+
+    /* ═══════════════════════════════
+       PAGE 2 — LOGIN
+    ═══════════════════════════════ */
+    #page-login {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--cream);
+      padding: 4rem 2rem;
+      position: relative;
+    }
+
+    #page-login::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 10%;
+      width: 80%; height: 1px;
+      background: rgba(149,69,53,0.15);
+    }
+
+    .login-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: rgba(94,37,16,0.55);
+      margin-bottom: 2.8rem;
+      font-weight: 300;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2rem, 6vw, 4rem);
+      color: var(--chestnut-deep);
+      text-align: center;
+      line-height: 1.1;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-sub {
+      font-size: 0.96rem;
+      color: rgba(94,37,16,0.6);
+      letter-spacing: 0.05em;
+      margin-bottom: 3.5rem;
+      font-weight: 300;
+    }
+
+    .login-form {
+      width: min(420px, 90vw);
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    .login-error {
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      color: var(--chestnut-mid);
+      text-align: center;
+      min-height: 1.1em;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      margin-top: -0.6rem;
+    }
+    .login-error.visible { opacity: 1; }
+
+    /* ═══════════════════════════════
+       PAGE 3 — DASHBOARD
+    ═══════════════════════════════ */
+    #page-dashboard {
+      flex-direction: column;
+      align-items: center;
+      background: var(--cream);
+      padding: 5rem 2rem 6rem;
+      position: relative;
+    }
+
+    #page-dashboard::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 10%;
+      width: 80%; height: 1px;
+      background: rgba(149,69,53,0.15);
+    }
+
+    .dash-form {
+      width: min(520px, 92vw);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: rgba(94,37,16,0.45);
+      font-weight: 300;
+      padding-bottom: 1rem;
+      border-top: 1px solid rgba(149,69,53,0.1);
+      margin-top: 2rem;
+      padding-top: 1.8rem;
+    }
+
+    .form-group-label:first-child {
+      border-top: none;
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    .optional-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      color: rgba(149,69,53,0.38);
+      margin-left: 0.6rem;
+      font-style: italic;
+      text-transform: none;
+    }
+
+    /* ── Shared field styles ── */
+    .field-wrap {
+      position: relative;
+      margin-bottom: 1.6rem;
+    }
+
+    .field-wrap label {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(94,37,16,0.65);
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+
+    .field-wrap input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(149,69,53,0.25);
+      padding: 0.6rem 0;
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: 1.05rem;
+      color: var(--chestnut-deep);
+      outline: none;
+      transition: border-color 0.3s ease;
+      -webkit-appearance: none;
+    }
+
+    .field-wrap input::placeholder {
+      color: rgba(94,37,16,0.3);
+      font-weight: 200;
+    }
+
+    .field-line {
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 1px; width: 0;
+      background: var(--chestnut);
+      transition: width 0.4s cubic-bezier(0.76,0,0.24,1);
+      pointer-events: none;
+    }
+
+    .field-wrap input:focus ~ .field-line { width: 100%; }
+
+    .field-prefix {
+      position: absolute;
+      bottom: 0.62rem; left: 0;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: rgba(94,37,16,0.5);
+      font-family: 'Jost', sans-serif;
+      pointer-events: none;
+    }
+    .has-prefix input { padding-left: 1rem; }
+
+    /* ── Shared button ── */
+    .action-btn {
+      display: block;
+      position: relative;
+      width: 100%;
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: 0.85rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--cream);
+      background: var(--chestnut);
+      border: none;
+      padding: 1rem 2.8rem;
+      cursor: pointer;
+      overflow: hidden;
+      transition: letter-spacing 0.35s ease;
+      margin-top: 0.4rem;
+    }
+
+    .action-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--chestnut-deep);
+      transform: translateX(-101%);
+      transition: transform 0.4s cubic-bezier(0.76,0,0.24,1);
+    }
+
+    .action-btn:hover::before { transform: translateX(0); }
+    .action-btn:hover { letter-spacing: 0.38em; }
+    .action-btn span { position: relative; z-index: 1; }
+
+    /* ── Upload zone ── */
+    .upload-zone {
+      width: 100%;
+      border: 1px solid rgba(149,69,53,0.2);
+      padding: 2.8rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+      position: relative;
+      transition: border-color 0.4s ease, background 0.4s ease;
+      cursor: default;
+    }
+
+    .upload-zone::after {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px dashed rgba(149,69,53,0.1);
+      pointer-events: none;
+      transition: border-color 0.4s ease;
+    }
+
+    .upload-zone:hover { border-color: rgba(149,69,53,0.4); background: rgba(149,69,53,0.025); }
+    .upload-zone:hover::after { border-color: rgba(149,69,53,0.2); }
+    .upload-zone:hover .upload-icon { transform: translateY(-4px); opacity: 0.9; }
+
+    .upload-icon {
+      width: 36px; height: 36px;
+      opacity: 0.38;
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease;
+    }
+    .upload-icon svg { width: 100%; height: 100%; }
+
+    .upload-hint-text {
+      font-size: 0.9rem;
+      color: rgba(94,37,16,0.5);
+      letter-spacing: 0.08em;
+      font-weight: 300;
+      text-align: center;
+    }
+
+    .upload-feedback {
+      font-size: 0.78rem;
+      color: rgba(149,69,53,0.6);
+      letter-spacing: 0.1em;
+      min-height: 1.1em;
+      text-align: center;
+    }
+
+    .upload-zone.drag-over { border-color: var(--chestnut); background: rgba(149,69,53,0.05); }
+
+    #fileInput { display: none; }
+
+    .upload-pick-btn {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: 0.82rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--cream);
+      background: var(--chestnut);
+      border: none;
+      padding: 0.7rem 1.8rem;
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+      transition: letter-spacing 0.3s ease;
+    }
+
+    .upload-pick-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--chestnut-deep);
+      transform: translateX(-101%);
+      transition: transform 0.4s cubic-bezier(0.76,0,0.24,1);
+    }
+
+    .upload-pick-btn:hover::before { transform: translateX(0); }
+    .upload-pick-btn:hover { letter-spacing: 0.34em; }
+    .upload-pick-btn span { position: relative; z-index: 1; }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes scrollDrop {
+      0%   { top: -100%; }
+      100% { top: 200%; }
+    }
+    @keyframes pageIn {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-enter { animation: pageIn 0.65s cubic-bezier(0.16,1,0.3,1) both; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .action-btn { padding: 0.9rem 1.4rem; }
+      .upload-zone { padding: 2rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════
+       PAGE 1 — HERO
+  ══════════════════════════════ -->
+  <section class="page active" id="page-hero">
+    <div class="hero-content">
+      <p class="eyebrow">Home Business &middot; Automated Marketing</p>
+      <h1>BeyondHomes</h1>
+      <p class="tagline">Power your business from where you live</p>
+    </div>
+
+    <div class="scroll-hint" id="scrollHint">
+      <span>Enter</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+       PAGE 2 — LOGIN
+  ══════════════════════════════ -->
+  <section class="page" id="page-login">
+    <p class="login-label">Secure Access</p>
+    <h2 class="section-title">Welcome Back</h2>
+    <p class="section-sub">Sign in to manage your campaigns</p>
+
+    <div class="login-form">
+
+      <div class="field-wrap">
+        <label for="loginCompany">Company Name</label>
+        <input type="text" id="loginCompany" placeholder="Your company name" autocomplete="organization" />
+        <span class="field-line"></span>
+      </div>
+
+      <div class="field-wrap">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••••" autocomplete="current-password" />
+        <span class="field-line"></span>
+      </div>
+
+      <p class="login-error" id="loginError">Incorrect company name or password. Please try again.</p>
+
+      <button class="action-btn" id="loginBtn">
+        <span>Sign In</span>
+      </button>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+       PAGE 3 — DASHBOARD
+  ══════════════════════════════ -->
+  <section class="page" id="page-dashboard">
+    <p class="login-label">Marketing Assets</p>
+    <h2 class="section-title">Launch Your Campaign</h2>
+    <p class="section-sub">Fill in your product details and connect your accounts</p>
+
+    <div class="dash-form">
+
+      <!-- ── Product Details ── -->
+      <p class="form-group-label">Product Details</p>
+
+      <div class="field-wrap">
+        <label for="productName">Product Name</label>
+        <input type="text" id="productName" placeholder="e.g. Handmade Soy Candle Set" />
+        <span class="field-line"></span>
+      </div>
+
+      <div class="field-wrap has-prefix">
+        <label for="productPrice">Price</label>
+        <span class="field-prefix">$</span>
+        <input type="number" id="productPrice" placeholder="0.00" min="0" step="0.01" />
+        <span class="field-line"></span>
+      </div>
+
+      <!-- ── LinkedIn ── -->
+      <p class="form-group-label">
+        LinkedIn Access
+        <span class="optional-tag">optional</span>
+      </p>
+
+      <div class="field-wrap">
+        <label for="liId">LinkedIn ID</label>
+        <input type="text" id="liId" placeholder="e.g. john-doe-123456" />
+        <span class="field-line"></span>
+      </div>
+
+      <!-- ── Instagram ── -->
+      <p class="form-group-label">
+        Instagram Access
+        <span class="optional-tag">optional</span>
+      </p>
+
+      <div class="field-wrap">
+        <label for="igUsername">Instagram Username</label>
+        <input type="text" id="igUsername" placeholder="@yourhandle" />
+        <span class="field-line"></span>
+      </div>
+
+      <!-- ── Marketing Images ── -->
+      <p class="form-group-label">Marketing Images</p>
+
+      <div class="upload-zone" id="uploadZone">
+        <div class="upload-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#954535" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 16 12 12 8 16"/>
+            <line x1="12" y1="12" x2="12" y2="21"/>
+            <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+          </svg>
+        </div>
+        <p class="upload-hint-text">Drag &amp; drop your marketing images here</p>
+        <button class="upload-pick-btn" type="button" id="pickFilesBtn">
+          <span>Select Images</span>
+        </button>
+        <input type="file" id="fileInput" accept="image/*" multiple />
+        <p class="upload-feedback" id="uploadFeedback">JPG, PNG, WEBP &middot; Up to 20 MB each</p>
+      </div>
+
+      <!-- ── Submit ── -->
+      <button class="action-btn" id="submitBtn" style="margin-top:2.8rem;">
+        <span>Launch Campaign</span>
+      </button>
+
+    </div>
+  </section>
+
+  <script>
+    /* ── Credentials ── */
+    const VALID_COMPANY  = 'Drishti';
+    const VALID_PASSWORD = 'dhrishti@123';
+
+    /* ── Page transition ── */
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active', 'page-enter');
+      });
+      const target = document.getElementById(id);
+      target.classList.add('active');
+      // trigger animation next frame
+      requestAnimationFrame(() => target.classList.add('page-enter'));
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    /* ── Hero: click scroll hint to go to login ── */
+    document.getElementById('scrollHint').addEventListener('click', () => showPage('page-login'));
+
+    /* ── Login logic ── */
+    function attemptLogin() {
+      const company  = document.getElementById('loginCompany').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const errEl    = document.getElementById('loginError');
+
+      if (company === VALID_COMPANY && password === VALID_PASSWORD) {
+        errEl.classList.remove('visible');
+        showPage('page-dashboard');
+      } else {
+        errEl.classList.add('visible');
+        document.getElementById('loginPassword').value = '';
+        document.getElementById('loginPassword').focus();
+      }
+    }
+
+    document.getElementById('loginBtn').addEventListener('click', attemptLogin);
+
+    ['loginCompany', 'loginPassword'].forEach(id => {
+      document.getElementById(id).addEventListener('keydown', e => {
+        if (e.key === 'Enter') attemptLogin();
+      });
+    });
+
+    /* ── Upload zone ── */
+    const zone       = document.getElementById('uploadZone');
+    const fileInput  = document.getElementById('fileInput');
+    const uploadFb   = document.getElementById('uploadFeedback');
+
+    document.getElementById('pickFilesBtn').addEventListener('click', () => fileInput.click());
+
+    function showFiles(files) {
+      if (!files || !files.length) return;
+      uploadFb.textContent = files.length === 1
+        ? `✓ ${files[0].name}`
+        : `✓ ${files.length} images selected`;
+    }
+
+    fileInput.addEventListener('change', () => showFiles(fileInput.files));
+    zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', ()  => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      showFiles(e.dataTransfer.files);
+    });
+
+    /* ── Submit ── */
+    document.getElementById('submitBtn').addEventListener('click', () => {
+      const name  = document.getElementById('productName').value.trim();
+      const price = document.getElementById('productPrice').value.trim();
+      if (!name || !price) {
+        alert('Please fill in at least the Product Name and Price before launching.');
+        return;
+      }
+      alert(`Campaign for "${name}" at $${price} has been queued for launch!`);
+    });
+  </script>
+</body>
+</html>
