@@ -75,15 +75,6 @@ BeyondHomes automates the entire marketing workflow. Users upload a product imag
 
 ## For Software:
 
-### Installation  
-
-```bash
-# Add installation commands here
-# Example:
-# npm install
-# Configure environment variables
-# Add API keys for HuggingFace, Gemini
-
 ---
 
 ## Screenshots (Add at least 3)
