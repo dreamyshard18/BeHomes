@@ -1,94 +1,112 @@
-# 🌸 BeyondHomes  
-### Automate Your Home Business Marketing
-
-BeyondHomes is an end-to-end marketing automation platform designed for **home-based businesses and micro-entrepreneurs**.
-
-From uploading a simple product photo to automatically generating a branded catalogue and posting on social media — BeyondHomes handles everything for you.
+# [Project Name] 🎯
 
 ---
 
-## 💡 Problem Statement
+# Basic Details  
 
-Many home-based businesses and small sellers — selling:
+**Team Name:** [Your Team Name]
 
-- 🧵 Textiles  
-- 🕯 Candles  
-- 💍 Jewellery  
-- 🍲 Homemade food  
-- 🎨 Local handicrafts  
-- 👗 Clothing  
+## Team Members  
 
-Often struggle with:
-
-- Managing digital inventory  
-- Designing professional catalogues  
-- Writing engaging social media captions  
-- Posting consistently on Instagram & LinkedIn  
-- Maintaining brand consistency  
-
-BeyondHomes removes this digital friction.
+- Member 1: Diya S Nair – MITS, Kochi  
+- Member 2: Neha Biju - MITS, Kochi
 
 ---
 
-## 🚀 How It Works
+## Hosted Project Link  
 
-### 1️⃣ Upload Product Image  
-The entrepreneur uploads a product image via a clean web interface.
-
-### 2️⃣ AI Product Classification  
-The image is sent into an automation workflow where:
-
-- A **HuggingFace image classification model**:
-  - Classifies the product into one of:
-    - Food  
-    - Jewellery  
-    - Candles  
-    - Handicrafts  
-    - Clothes  
-  - Extracts dominant colors from the image.
-
-### 3️⃣ Smart Catalogue Generation  
-Based on the detected category, a one-page product catalogue is auto-generated with a predefined aesthetic theme:
-
-| Category      | Color Theme |
-|--------------|------------|
-| 🕯 Candles     | Beige tones |
-| 🍲 Food        | Warm & colourful |
-| 🎨 Handicrafts | Blue tones |
-| 💍 Jewellery   | Pink & purple tones |
-| 👗 Clothes     | Green tones |
-
-The generated catalogue includes:
-- Product image  
-- Clean layout  
-- Category-specific theme  
-- Marketing-ready design  
-
-### 4️⃣ Caption Generation  
-Using **Gemini API**, captions are generated for:
-- Instagram  
-- LinkedIn  
-
-Each caption includes:
-- Engaging product description  
-- Platform-appropriate tone  
-- Relevant hashtags  
-
-### 5️⃣ Automated Social Posting  
-The system automatically posts:
-- Product image  
-- Generated catalogue  
-- AI-generated caption  
-
-To the user's:
-- Instagram handle  
-- LinkedIn profile  
-
-All automated. All through a seamless workflow.
+[Add deployed project link here]  
 
 ---
 
-## 🔄 Complete Workflow Architecture
+# Project Description  
+
+BeyondHomes is an end-to-end marketing automation platform for home-based businesses and micro-entrepreneurs. It transforms a simple product image into a branded catalogue and automatically generates and posts AI-powered captions to social media platforms.
+
+---
+
+# The Problem Statement  
+
+Home-based businesses and micro-entrepreneurs struggle with managing digital inventory, designing professional catalogues, writing engaging captions, and posting consistently on platforms like Instagram and LinkedIn while maintaining brand consistency.
+
+---
+
+# The Solution  
+
+BeyondHomes automates the entire marketing workflow. Users upload a product image, which is classified using AI, themed automatically, converted into a marketing-ready catalogue, paired with AI-generated captions, and auto-posted to social media platforms — all through a seamless automation pipeline.
+
+---
+
+# Technical Details  
+
+## Technologies/Components Used  
+
+### For Software:
+
+**Languages used:**  
+- HTML  
+- CSS  
+- JavaScript  
+
+**Frameworks used:**  
+- n8n (Workflow Automation Engine)
+
+**Libraries used:**  
+- HuggingFace (Image Classification Model)  
+- Gemini API (Caption & Hashtag Generation)  
+- Placid Automation Toolkit  
+
+**Tools used:**  
+- Placid.app (Design automation)
+
+---
+
+# Features  
+
+- **Feature 1:** One-click product image upload via web interface  
+- **Feature 2:** AI-based product categorization and dominant color extraction  
+- **Feature 3:** Automatic themed catalogue generation based on product type  
+- **Feature 4:** AI-powered caption and hashtag generation for Instagram & LinkedIn  
+- **Feature 5:** Fully automated cross-platform social media posting  
+
+---
+
+# Implementation  
+
+## For Software:
+
+### Installation  
+
+```bash
+# Add installation commands here
+# Example:
+# npm install
+# Configure environment variables
+# Add API keys for HuggingFace, Gemini
+
+---
+
+## Screenshots (Add at least 3)
+
+![Screenshot1](Screenshots/landing.png)  
+Landing Page of BeyondHomes
+
+![Screenshot2](Screenshots/credentials.png)  
+Marketing Credentials after login
+
+![Screenshot3](Screenshots/n8nworkflow.png)  
+n8n workflow of the system
+
+---
+
+# Diagrams
+
+## System Architecture:
+
+![Architecture Diagram](architecture.png)  
+The architecture of BeyondHomes powers a fully automated, AI-driven product marketing pipeline. When a user uploads a product image, the n8n workflow triggers AI classification (via Hugging Face and OpenCV) to identify the product category. Based on this classification, the system applies tailored design themes and automatically generates a branded catalogue using the design automation engine. In parallel, the Gemini API creates engaging captions and relevant hashtags. The final catalogue image and content are then seamlessly published to Instagram—transforming a single product upload into a ready-to-share, on-brand social media post in minutes.
+
+### Architecture Flow:
 
 Landing Page (Image Upload)  
 ⬇  
@@ -96,101 +114,41 @@ n8n Automation Workflow
 ⬇  
 HuggingFace Model → Product Classification & Color Extraction  
 ⬇  
-Theme Selection  
+Theme Selection Logic  
 ⬇  
 Catalogue Generation (Canva / Placid)  
 ⬇  
 Gemini Caption Generation  
 ⬇  
-Auto Post to Instagram & LinkedIn  
+Auto Post to Instagram & LinkedIn APIs  
 
 ---
 
-## 🛠 Tech Stack
+## Application Workflow:
 
-### Frontend
-- HTML  
-- CSS  
-- JavaScript  
+![Workflow](n8nworkflow.png "Application Workflow")  
 
-### AI & ML
-- HuggingFace (Image Classification Model)
-- Gemini API (Caption & Hashtag Generation)
+### Workflow Steps:
 
-### Automation
-- n8n (Workflow Automation Engine)
-- Placid Automation Toolkit
-- Canva (Design Generation)
-
-### Social Platforms
-- Instagram API
-- LinkedIn API
+1. User uploads product image  
+2. Image sent to automation pipeline  
+3. AI classifies category and extracts dominant color  
+4. Theme selected based on category  
+5. Catalogue auto-generated  
+6. Captions generated using Gemini  
+7. Content auto-posted to Instagram & LinkedIn  
 
 ---
 
-## ✨ Key Features
+# Team Contributions
 
-✔ One-click product upload  
-✔ AI-based product categorization  
-✔ Automatic brand-aligned catalogue creation  
-✔ Smart caption generation with hashtags  
-✔ Cross-platform auto-posting  
-✔ Fully automated marketing workflow  
+- Diya S Nair: Workflow design, API integration  
+- Neha Biju: UI design, AI model integration
 
 ---
 
-## 🎯 Target Users
+# License
 
-- Home-based businesses  
-- Micro-entrepreneurs  
-- Handmade product sellers  
-- Local artisans  
-- Small-scale brands  
-- Independent creators  
+This project is licensed under the **MIT License** — see the LICENSE file for details.
 
 ---
-
-## 🔮 Future Roadmap
-
-- Inventory management dashboard  
-- Sales & engagement analytics  
-- WhatsApp Business integration  
-- Multi-language caption generation  
-- Custom brand theme selection  
-- Marketplace integration  
-
----
-
-## 🏗 Project Vision
-
-BeyondHomes aims to empower small and home-based businesses by:
-
-- Reducing digital complexity  
-- Saving time  
-- Improving online visibility  
-- Creating professional marketing assets automatically  
-
-From local homes to global audiences —  
-**BeyondHomes helps businesses go beyond.**
-
----
-
-## 🤝 Contributing
-
-We welcome contributions!
-
-1. Fork the repository  
-2. Create a feature branch  
-3. Submit a pull request  
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-## 💬 Tagline
-
-**BeyondHomes — Turning Product Photos into Powerful Marketing.**
