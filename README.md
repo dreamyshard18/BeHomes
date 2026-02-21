@@ -1,4 +1,5 @@
-# [Project Name] 🎯
+![Header]("header.png")
+# BeyondHomes 🎯
 
 ---
 
@@ -15,7 +16,7 @@
 
 ## Hosted Project Link  
 
-[Add deployed project link here]  
+  
 
 ---
 
@@ -88,13 +89,13 @@ BeyondHomes automates the entire marketing workflow. Users upload a product imag
 
 ## Screenshots (Add at least 3)
 
-![Screenshot1](Screenshots/landing.png)  
+![Screenshot1]("Screenshots/landing.png")  
 Landing Page of BeyondHomes
 
-![Screenshot2](Screenshots/credentials.png)  
+![Screenshot2]("Screenshots/credentials.png")  
 Marketing Credentials after login
 
-![Screenshot3](Screenshots/n8nworkflow.png)  
+![Screenshot3]("Screenshots/n8nworkflow.png")  
 n8n workflow of the system
 
 ---
@@ -103,7 +104,7 @@ n8n workflow of the system
 
 ## System Architecture:
 
-![Architecture Diagram](architecture.png)  
+![Architecture Diagram]("architecture.png")  
 The architecture of BeyondHomes powers a fully automated, AI-driven product marketing pipeline. When a user uploads a product image, the n8n workflow triggers AI classification (via Hugging Face and OpenCV) to identify the product category. Based on this classification, the system applies tailored design themes and automatically generates a branded catalogue using the design automation engine. In parallel, the Gemini API creates engaging captions and relevant hashtags. The final catalogue image and content are then seamlessly published to Instagram—transforming a single product upload into a ready-to-share, on-brand social media post in minutes.
 
 ### Architecture Flow:
@@ -126,7 +127,7 @@ Auto Post to Instagram & LinkedIn APIs
 
 ## Application Workflow:
 
-![Workflow](n8nworkflow.png "Application Workflow")  
+![Workflow]("n8nworkflow.png")  
 
 ### Workflow Steps:
 
