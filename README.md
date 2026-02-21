@@ -1,11 +1,11 @@
-![Header]("header.png")
+![Header]("./header.png")
 # BeyondHomes 🎯
 
 ---
 
 # Basic Details  
 
-**Team Name:** [Your Team Name]
+**Team Name:** CodeRose
 
 ## Team Members  
 
