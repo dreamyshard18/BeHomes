@@ -1,0 +1,957 @@
+{
+  "name": "AI-Powered Product Catalog and Social Media Campaign Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "product-image",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "269b8b8d-f748-4c3d-aac1-5c6552c7505e",
+      "name": "Receive Product Image",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        688
+      ],
+      "webhookId": "8dbbb489-766d-4fcd-b7e9-4332ee7a5228",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api-inference.huggingface.co/models/openai/clip-vit-large-patch14",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "Inputs",
+              "inputDataFieldName": "Product_Image"
+            },
+            {
+              "name": "parameters",
+              "value": "{   \"candidate_labels\": [\"Food\", \"Jewellery\", \"Clothes\", \"Candles\", \"Handicrafts\"] }"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "14761264-453c-480e-8458-a31c87c6cf0c",
+      "name": "Classify Image with Hugging Face",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        480,
+        688
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "37qZISSSY7sugboh",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "category",
+              "value": "={{ $('Classify Image with Hugging Face').item.json.reduce((max, item) => item.score > max.score ? item : max).label }}",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "originalImage",
+              "value": "={{ $('Receive Product Image').item.json }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dd90b32d-af6f-4c14-8fc2-ecee864c3b7e",
+      "name": "Extract Category",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        704,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "Candles",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "Food",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "Handicrafts",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "Jewellery",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "Clothes",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cc8662c6-eb41-4dbb-b460-1557aa1c213f",
+      "name": "Route by Category",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        928,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "brandColor",
+              "value": "#F5F5DC",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "64ff8f27-ac2e-4828-978b-496d15a3a6ba",
+      "name": "Assign Color - Candles",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1152,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "brandColor",
+              "value": "#FF7F50",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "13f2740c-bd0d-486d-b497-c8edf2122b35",
+      "name": "Assign Color - Food",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1152,
+        496
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "brandColor",
+              "value": "#4A90E2",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "acff277e-2919-49f6-bc3f-40abab0a9e41",
+      "name": "Assign Color - Handicrafts",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1152,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "brandColor",
+              "value": "#DA70D6",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c7235253-3f32-4155-9081-ef5a33e62127",
+      "name": "Assign Color - Jewellery",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1152,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "brandColor",
+              "value": "#2E8B57",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2dbc934f-5c14-4c4f-82c6-ec8d3dee37a1",
+      "name": "Assign Color - Clothes",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1152,
+        1072
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": []
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "43b66558-040a-4611-9b98-12f6d134d2ce",
+      "name": "Merge Color Paths",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1376,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=A product in the {{ $json.category }} niche was just uploaded. Write two captions:\n1. Instagram: Lifestyle-focused, heavy on emojis and hashtags.\n2. LinkedIn: Professional, focusing on the quality and the entrepreneur's journey.\nKeep the tone empowering and authentic.\n\nFormat your response as:\nINSTAGRAM:\n[caption]\n\nLINKEDIN:\n[caption]"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "id": "d0804520-9c29-4460-83a2-85de1c9b4256",
+      "name": "Generate Captions with Gemini",
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1600,
+        688
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "9XRWFZuKe0yruCsY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "instagramCaption",
+              "value": "={{ $('Generate Captions with Gemini').item.json.response.split('Instagram:')[1].split('LinkedIn:')[0].trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "linkedinCaption",
+              "value": "={{ $('Generate Captions with Gemini').item.json.response.split('LinkedIn:')[1].trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "17e5cbca-62b3-45e6-8f29-7a8c22e0e62e",
+      "name": "Parse Captions",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1952,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "mode": "id",
+          "value": "<__PLACEHOLDER_VALUE__Digital Storefront Base ID__>"
+        },
+        "table": {
+          "__rl": true,
+          "mode": "id",
+          "value": "<__PLACEHOLDER_VALUE__Table Name__>"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "category": "={{ $json.category }}",
+            "instagramCaption": "={{ $json.instagramCaption }}",
+            "linkedinCaption": "={{ $json.linkedinCaption }}",
+            "brandColor": "={{ $json.brandColor }}",
+            "originalImage": "={{ $json.originalImage }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "b4f8e856-86f4-4041-86bb-04eaa3f8550a",
+      "name": "Save to Airtable",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2176,
+        688
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v18.0/<__PLACEHOLDER_VALUE__instagram_account_id__>/media",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "image_url",
+              "value": "={{ $json.originalImage }}"
+            },
+            {
+              "name": "caption",
+              "value": "={{ $json.instagramCaption }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3c81b9dc-cee5-4d9d-9621-6858e5aada9e",
+      "name": "Post to Instagram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2176,
+        880
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "person": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "text": "={{ $json.linkedinCaption }}",
+        "shareMediaCategory": "IMAGE",
+        "additionalFields": {}
+      },
+      "id": "f5179d65-e4ac-423f-bbca-5d203662f4ca",
+      "name": "Post to LinkedIn",
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        496
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Create a compelling product description for this {{ $json.category }} item. Product name: {{ $json.product_name }}. Price: {{ $json.product_price }}. Write a 2-3 sentence description highlighting its unique features and appeal. Be specific and engaging."
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "builtInTools": {},
+        "options": {}
+      },
+      "id": "ca4b005a-0c05-45e2-b8e5-7dbcc2055e58",
+      "name": "Generate Product Description",
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        3136,
+        304
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "9XRWFZuKe0yruCsY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.placid.app/api/rest/images",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "product_name",
+              "value": "={{ $json.product_name }}"
+            },
+            {
+              "name": "product_price",
+              "value": "={{ $json.product_price }}"
+            },
+            {
+              "name": "product_description",
+              "value": "={{ $json.product_description }}"
+            },
+            {
+              "name": "color",
+              "value": "={{ $json.color }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "00321a12-79ec-4fe5-9c85-e3fdc4fc49d0",
+      "name": "Create Image in Placid",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3488,
+        304
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ced5541b-2787-4d93-b8ac-addc74ebbb34",
+      "name": "Wait for Placid Processing",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3776,
+        304
+      ],
+      "webhookId": "e67b16c9-fec8-4031-a9c8-e32c418304db"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Create Image in Placid').item.json.image_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "4ff68229-a837-4229-b32a-e1ebe40bc181",
+      "name": "Download Image from Placid",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4000,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "name": "={{ $json.category }}_{{ $json.product_name }}_catalog.jpg",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "10olhn06_QX-fGqcYDmU96Kgr65P_TKdH",
+          "mode": "list",
+          "cachedResultName": "demon8n",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/10olhn06_QX-fGqcYDmU96Kgr65P_TKdH"
+        },
+        "options": {}
+      },
+      "id": "ec5dcd03-d1d0-4fa4-9d52-833823ae051f",
+      "name": "Upload to Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        4224,
+        304
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "gqcVxt3rd1mXqsao",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Business inputs",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Product Name"
+            },
+            {
+              "fieldLabel": "Product Price"
+            },
+            {
+              "fieldLabel": "Product_Image",
+              "fieldType": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        192,
+        912
+      ],
+      "id": "4e534af2-3782-4d8b-a650-d5cdbc46eaed",
+      "name": "On form submission",
+      "webhookId": "93decf39-6b3b-4d04-9273-e5f853e27507"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.placid.app/api/rest/images",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "1dipt7pfjsdwp"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"template_uuid\": \"1dipt7pfjsdwp\",\n  \"create_now\": true,\n  \"layers\": {\n    \"product_name\": \"{{ $json.product_name }}\",\n    \"product_price\": \"{{ $json.product_price }}\",\n    \"product_description\": \"{{ $json.product_description }}\",\n    \"color\": \"{{ $json.color }}\",\n    \"product_photo\": {\n      \"image\": \"data:image/jpeg;base64,{{$binary.product_image.data}}\"\n    }\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3840,
+        448
+      ],
+      "id": "2fef1cea-d3ca-46dd-a409-8f1988820f3f",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "e73aa69c-87b5-4874-b3b5-817808bb2327",
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        464,
+        960
+      ],
+      "id": "5c998953-3d08-4c41-999d-0b9fd68255a0",
+      "name": "Webhook",
+      "webhookId": "e73aa69c-87b5-4874-b3b5-817808bb2327"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Route by Category": {
+      "main": [
+        [
+          {
+            "node": "Assign Color - Candles",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Assign Color - Food",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Assign Color - Handicrafts",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Assign Color - Jewellery",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Assign Color - Clothes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Receive Product Image": {
+      "main": [
+        []
+      ]
+    },
+    "Classify Image with Hugging Face": {
+      "main": [
+        [
+          {
+            "node": "Extract Category",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Category": {
+      "main": [
+        [
+          {
+            "node": "Route by Category",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Color - Candles": {
+      "main": [
+        [
+          {
+            "node": "Merge Color Paths",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Color - Food": {
+      "main": [
+        [
+          {
+            "node": "Merge Color Paths",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Color - Handicrafts": {
+      "main": [
+        [
+          {
+            "node": "Merge Color Paths",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Color - Jewellery": {
+      "main": [
+        [
+          {
+            "node": "Merge Color Paths",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Color - Clothes": {
+      "main": [
+        [
+          {
+            "node": "Merge Color Paths",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Color Paths": {
+      "main": [
+        [
+          {
+            "node": "Generate Product Description",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Captions with Gemini": {
+      "main": [
+        [
+          {
+            "node": "Parse Captions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Captions": {
+      "main": [
+        [
+          {
+            "node": "Save to Airtable",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post to Instagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Product Description": {
+      "main": [
+        [
+          {
+            "node": "Create Image in Placid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Image in Placid": {
+      "main": [
+        [
+          {
+            "node": "Wait for Placid Processing",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Placid Processing": {
+      "main": [
+        [
+          {
+            "node": "Download Image from Placid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Image from Placid": {
+      "main": [
+        [
+          {
+            "node": "Upload to Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Generate Captions with Gemini",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post to LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Classify Image with Hugging Face",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Classify Image with Hugging Face",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "availableInMCP": false
+  },
+  "versionId": "c3f69ac5-b831-47c4-9ebf-a5a4672ddba1",
+  "meta": {
+    "instanceId": "c8fd2f8237953b982c494ce6be5376edc53149b0517dcd4d305b4aa8702f3c0d"
+  },
+  "id": "DS6kcX0A11kUiWis",
+  "tags": []
+}
